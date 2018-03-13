@@ -3936,13 +3936,13 @@
     <!--************************************************************-->
     <!-- byakhee -->
     <!--************************************************************-->
-    <monster id="byakhee">
+    <monster id="AMOEBA_MONSTER">
         <text>
-            <name_a>a Byakhee</name_a>
-            <name_the>the Byakhee</name_the>
-            <corpse_name_a>a Byakhee corpse</corpse_name_a>
-            <corpse_name_the>the Byakhee corpse</corpse_name_the>
-            <description>"There flapped rhythmically a horde of tame, trained, hybrid winged things ... not altogether crows, nor moles, nor buzzards, nor ants, nor decomposed human beings, but something I cannot and must not recall."-H.P. Lovecraft, "The Festival". A Byakhee appears as a disturbing mixture of creatures composing a humanoid form. Insect traits vie with predatory birds, digging mammals, and possibly the necrotic flesh of human victims. At home in lonely voids of interstellar space, Byakhee are a created race, though their origin is buried in the distant past.</description>
+            <name_a>TBD</name_a>
+            <name_the>TBD</name_the>
+            <corpse_name_a>TBD</corpse_name_a>
+            <corpse_name_the>TBD</corpse_name_the>
+            <description>An otherworldly life form, akin to a macroscopic amoeba. It disrupts physical space around it, likely an effect of its dissonance with any other cosmos than its own.</description>
             <allow_generated_description>true</allow_generated_description>
             <wary_message>looks wary.</wary_message>
             <aware_message_seen></aware_message_seen>
@@ -3982,6 +3982,7 @@
             </attack>
         </attacks>
         <properties>
+            <property>alters_environment</property>
             <property>darkvision</property>
             <property>flying</property>
         </properties>
@@ -4004,8 +4005,7 @@
             <auto_spawn>true</auto_spawn>
             <can_be_summoned_by_monster>true</can_be_summoned_by_monster>
             <nr_allowed_to_spawn>-1</nr_allowed_to_spawn>
-            <group_size weight="4">alone</group_size>
-            <group_size weight="1">few</group_size>
+            <group_size>alone</group_size>
             <native_room>plain</native_room>
             <native_room>chasm</native_room>
         </spawning>
