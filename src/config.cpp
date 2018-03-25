@@ -56,6 +56,8 @@ bool is_bot_playing_ = false;
 bool is_audio_enabled_ = false;
 bool is_amb_audio_enabled_ = false;
 bool is_tiles_mode_ = false;
+int gui_cell_px_w_ = -1;
+int gui_cell_px_h_ = -1;
 int map_cell_px_w_ = -1;
 int map_cell_px_h_ = -1;
 
@@ -109,10 +111,35 @@ void update_render_dims()
 {
         TRACE_FUNC_BEGIN;
 
-        const P font_dims = parse_dims_from_font_name(font_name_);
+        if (is_tiles_mode_)
+        {
+                // TODO: Temporary solution
+                const P font_dims = parse_dims_from_font_name(font_name_);
 
-        map_cell_px_w_ = font_dims.x;
-        map_cell_px_h_ = font_dims.y;
+                gui_cell_px_w_ = font_dims.x;
+                gui_cell_px_h_ = font_dims.y;
+                map_cell_px_w_ = 24;
+                map_cell_px_h_ = 24;
+        }
+        else
+        {
+                const P font_dims = parse_dims_from_font_name(font_name_);
+
+                gui_cell_px_w_ = map_cell_px_w_ = font_dims.x;
+                gui_cell_px_h_ = map_cell_px_h_ = font_dims.y;
+        }
+
+        TRACE << "GUI cell size: "
+              << gui_cell_px_w_
+              << ","
+              << gui_cell_px_h_
+              << std::endl;
+
+        TRACE << "Map cell size: "
+              << map_cell_px_w_
+              << ","
+              << map_cell_px_h_
+              << std::endl;
 
         TRACE_FUNC_END;
 }
@@ -124,7 +151,7 @@ void set_default_variables()
         is_audio_enabled_ = true;
         is_amb_audio_enabled_ = true;
         is_tiles_mode_ = true;
-        font_name_ = "16x24_v1.png";
+        font_name_ = "12x24.png";
 
         update_render_dims();
 
@@ -171,23 +198,23 @@ void player_sets_option(const MenuBrowser& browser)
 
                 // If we do not have a font loaded with the same size as the
                 // tiles, use the first font with matching size
-                if (is_tiles_mode_ &&
-                    ((map_cell_px_w_ != tile_px_w) ||
-                     (map_cell_px_h_ != tile_px_h)))
-                {
-                        for (const auto& font_name : font_image_names)
-                        {
-                                const P font_dims =
-                                        parse_dims_from_font_name(font_name);
+                // if (is_tiles_mode_ &&
+                //     ((map_cell_px_w_ != tile_px_w) ||
+                //      (map_cell_px_h_ != tile_px_h)))
+                // {
+                //         for (const auto& font_name : font_image_names)
+                //         {
+                //                 const P font_dims =
+                //                         parse_dims_from_font_name(font_name);
 
-                                if (font_dims == P(tile_px_w, tile_px_h))
-                                {
-                                        font_name_ = font_name;
+                //                 if (font_dims == P(tile_px_w, tile_px_h))
+                //                 {
+                //                         font_name_ = font_name;
 
-                                        break;
-                                }
-                        }
-                }
+                //                         break;
+                //                 }
+                //         }
+                // }
 
                 update_render_dims();
 
@@ -229,17 +256,17 @@ void player_sets_option(const MenuBrowser& browser)
                         }
 
                         // Try fonts until a matching one is found
-                        while ((map_cell_px_w_ != tile_px_w) ||
-                               (map_cell_px_h_ != tile_px_h))
-                        {
-                                font_idx =
-                                        (font_idx + 1) %
-                                        font_image_names.size();
+                        // while ((map_cell_px_w_ != tile_px_w) ||
+                        //        (map_cell_px_h_ != tile_px_h))
+                        // {
+                        //         font_idx =
+                        //                 (font_idx + 1) %
+                        //                 font_image_names.size();
 
-                                font_name_ = font_image_names[font_idx];
+                        //         font_name_ = font_image_names[font_idx];
 
-                                update_render_dims();
-                        }
+                        //         update_render_dims();
+                        // }
                 }
 
                 sdl_base::init();
@@ -562,6 +589,16 @@ std::string font_name()
 bool is_fullscreen()
 {
         return is_fullscreen_;
+}
+
+int gui_cell_px_w()
+{
+        return gui_cell_px_w_;
+}
+
+int gui_cell_px_h()
+{
+        return gui_cell_px_h_;
 }
 
 int map_cell_px_w()

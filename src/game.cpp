@@ -48,6 +48,7 @@
 #include "property.hpp"
 #include "property_data.hpp"
 #include "property_handler.hpp"
+#include "viewport.hpp"
 
 namespace game
 {
@@ -1168,6 +1169,8 @@ void GameState::on_start()
 
 void GameState::draw()
 {
+    viewport::focus_on(map::player->pos);
+
     draw_map::run();
 
     status_lines::draw();

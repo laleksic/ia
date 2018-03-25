@@ -839,16 +839,14 @@ void SpellMayhem::run_effect(Actor* const caster,
 
     const P& caster_pos = caster->pos;
 
-    const int destr_radi = fov_std_radi_int + (int)skill * 2;
+    const int destr_radi = fov_radi_int + (int)skill * 2;
 
     const int x0 = std::max(1, caster_pos.x - destr_radi);
     const int y0 = std::max(1, caster_pos.y - destr_radi);
     const int x1 = std::min(map_w - 1, caster_pos.x + destr_radi) - 1;
     const int y1 = std::min(map_h - 1, caster_pos.y + destr_radi) - 1;
 
-    //
     // Run explosions
-    //
     std::vector<P> p_bucket;
 
     const int expl_radi_diff = -1;
@@ -898,9 +896,7 @@ void SpellMayhem::run_effect(Actor* const caster,
         p_bucket.erase(p_bucket.begin() + idx);
     }
 
-    //
     // Explode braziers
-    //
     for (int x = x0; x <= x1; ++x)
     {
         for (int y = y0; y <= y1; ++y)

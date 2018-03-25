@@ -34,7 +34,7 @@ Rigid::Rigid(const P& p) :
     item_container_(),
     burn_state_(BurnState::not_burned),
     started_burning_this_turn_(false),
-    gore_tile_(TileId::empty),
+    gore_tile_(TileId::END),
     gore_character_(0),
     is_bloody_(false),
     nr_turns_color_corrupted_(-1) {}
@@ -456,7 +456,7 @@ Color Rigid::color_bg() const
 
 void Rigid::clear_gore()
 {
-    gore_tile_ = TileId::empty;
+    gore_tile_ = TileId::END;
     gore_character_ = ' ';
     is_bloody_ = false;
 }
@@ -758,7 +758,7 @@ TileId Wall::front_wall_tile() const
     }
 
     ASSERT(false && "Failed to set front wall tile");
-    return TileId::empty;
+    return TileId::END;
 }
 
 TileId Wall::top_wall_tile() const
@@ -779,7 +779,7 @@ TileId Wall::top_wall_tile() const
     }
 
     ASSERT(false && "Failed to set top wall tile");
-    return TileId::empty;
+    return TileId::END;
 }
 
 void Wall::set_rnd_common_wall()

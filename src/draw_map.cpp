@@ -2,6 +2,7 @@
 
 #include "io.hpp"
 #include "map.hpp"
+#include "viewport.hpp"
 #include "actor.hpp"
 #include "actor_mon.hpp"
 #include "actor_player.hpp"
@@ -43,7 +44,7 @@ static void set_rigids()
 
                         const auto* const f = cell.rigid;
 
-                        TileId gore_tile = TileId::empty;
+                        TileId gore_tile = TileId::END;
 
                         char gore_character = 0;
 
@@ -53,7 +54,7 @@ static void set_rigids()
                                 gore_character = f->gore_character();
                         }
 
-                        if (gore_tile == TileId::empty)
+                        if (gore_tile == TileId::END)
                         {
                                 render_data.tile = f->tile();
                                 render_data.character = f->character();
@@ -162,7 +163,7 @@ static void set_dead_actors()
                     !actor->is_corpse() ||
                     actor->data().character == 0 ||
                     actor->data().character == ' ' ||
-                    actor->data().tile == TileId::empty)
+                    actor->data().tile == TileId::END)
                 {
                         continue;
                 }
@@ -250,7 +251,7 @@ static void set_mobiles()
                 const char mob_character = mob->character();
 
                 if (!map::cells[p.x][p.y].is_seen_by_player ||
-                    mob_tile == TileId::empty ||
+                    mob_tile == TileId::END ||
                     mob_character == 0 ||
                     mob_character == ' ')
                 {
@@ -268,7 +269,7 @@ static void set_mobiles()
 static void set_living_seen_monster(const Mon& mon,
                                     CellRenderData& render_data)
 {
-        if (mon.tile() == TileId::empty ||
+        if (mon.tile() == TileId::END ||
             mon.character() == 0 ||
             mon.character() == ' ')
         {
@@ -318,7 +319,7 @@ static void set_living_hidden_monster(const Mon& mon,
                 colors::mon_allied_bg() :
                 colors::gray();
 
-        render_data.tile = TileId::empty;
+        render_data.tile = TileId::END;
         render_data.character = '!';
         render_data.color = colors::black();
         render_data.color_bg = color_bg;
@@ -380,24 +381,28 @@ void set_unseen_cells_from_player_memory()
 
 static void draw_render_array()
 {
-        for (int x = 0; x < map_w; ++x)
-        {
-                for (int y = 0; y < map_h; ++y)
-                {
-                        auto& render_data = render_array[x][y];
+        const R map_view = viewport::get_map_view_area();
 
-                        const P pos(x, y);
+        for (int x = map_view.p0.x; x <= map_view.p1.x; ++x)
+        {
+                for (int y = map_view.p0.y; y <= map_view.p1.y; ++y)
+                {
+                        const P map_pos = P(x, y);
+
+                        const P view_pos = viewport::to_view_pos(map_pos);
+
+                        auto& render_data = render_array[map_pos.x][map_pos.y];
 
                         // NOTE: It can happen that text is drawn on the map
                         // even in tiles mode - for example exclamation marks on
                         // cells with known, unseen actors
                         if (config::is_tiles_mode() &&
-                            (render_data.tile != TileId::empty))
+                            (render_data.tile != TileId::END))
                         {
                                 io::draw_tile(
                                         render_data.tile,
                                         Panel::map,
-                                        pos,
+                                        view_pos,
                                         render_data.color,
                                         render_data.color_bg);
                         }
@@ -407,7 +412,7 @@ static void draw_render_array()
                                 io::draw_character(
                                         render_data.character,
                                         Panel::map,
-                                        pos,
+                                        view_pos,
                                         render_data.color,
                                         render_data.color_bg);
                         }
@@ -440,6 +445,13 @@ static void draw_life_bar(const Actor& actor)
                 return;
         }
 
+        const P map_pos = actor.pos.with_y_offset(1);
+
+        if (!viewport::is_in_ivew(map_pos))
+        {
+                return;
+        }
+
         const P cell_dims(config::map_cell_px_w(),
                           config::map_cell_px_h());
 
@@ -449,9 +461,11 @@ static void draw_life_bar(const Actor& actor)
 
         const int w_red = w_bar_tot - w_green;
 
-        PxPos px_pos = io::get_px_pos(
+        const P view_pos = viewport::to_view_pos(map_pos);
+
+        PxPos px_pos = io::map_to_px_coords(
                 Panel::map,
-                actor.pos.with_y_offset(1));
+                view_pos);
 
         px_pos.value.y -= 2;
 
@@ -495,6 +509,11 @@ static void draw_player_character()
 {
         const P& pos = map::player->pos;
 
+        if (!viewport::is_in_ivew(pos))
+        {
+                return;
+        }
+
         Item* item = map::player->inv().item_in_slot(SlotId::wpn);
 
         const bool is_ghoul = player_bon::bg() == Bg::ghoul;
@@ -529,7 +548,7 @@ static void draw_player_character()
                 tile,
                 character,
                 Panel::map,
-                pos,
+                viewport::to_view_pos(pos),
                 color,
                 color_bg);
 

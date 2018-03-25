@@ -2176,15 +2176,11 @@ void Player::update_fov()
         fov_hack();
     }
 
-    //
     // The player's current cell is always seen - mostly to update item info
     // while blind (i.e. when you pick up an item you should see it disappear)
-    //
     map::cells[pos.x][pos.y].is_seen_by_player = true;
 
-    //
     // Cheat vision
-    //
     if (init::is_cheat_vision_enabled)
     {
         // Show all cells adjacent to cells which can be shot or seen through

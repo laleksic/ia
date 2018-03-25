@@ -5,7 +5,6 @@
 #include "player_bon.hpp"
 #include "sdl_base.hpp"
 #include "config.hpp"
-#include "panel.hpp"
 #include "io.hpp"
 #include "audio.hpp"
 #include "line_calc.hpp"
@@ -40,10 +39,8 @@ void init_io()
 
     sdl_base::init();
     config::init();
-    panels::init();
     io::init();
     query::init();
-    io::init();
     audio::init();
     colors::init();
 
@@ -55,7 +52,6 @@ void cleanup_io()
     TRACE_FUNC_BEGIN;
 
     audio::cleanup();
-    io::cleanup();
     io::cleanup();
     sdl_base::cleanup();
 

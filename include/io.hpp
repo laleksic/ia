@@ -16,7 +16,7 @@ struct CellRenderData
 {
         CellRenderData& operator=(const CellRenderData&) = default;
 
-        TileId tile = TileId::empty;
+        TileId tile = TileId::END;
         char character = 0;
         Color color = colors::black();
         Color color_bg = colors::black();
@@ -44,7 +44,7 @@ struct PxPos
 {
         PxPos() {}
 
-        PxPos (int x, int y) :
+        PxPos(int x, int y) :
                 value(P(x, y)) {}
 
         P value = P();
@@ -70,14 +70,28 @@ void update_screen();
 
 void clear_screen();
 
-// Scale from cell coordinate(s) to screen pixel coordinate(s)
-int to_px_x(const int value);
-int to_px_y(const int value);
-PxPos to_px(const P pos);
-PxPos to_px(const int x, const int y);
+// Scale from gui/map cell coordinate(s) to pixel coordinate(s)
+int gui_to_px_coords_x(const int value);
+int gui_to_px_coords_y(const int value);
+
+int map_to_px_coords_x(const int value);
+int map_to_px_coords_y(const int value);
+
+PxPos gui_to_px_coords(const P pos);
+PxPos gui_to_px_coords(const int x, const int y);
+
+PxPos map_to_px_coords(const P pos);
+PxPos map_to_px_coords(const int x, const int y);
+
+P px_to_gui_coords(const PxPos px_pos);
+
+P px_to_map_coords(const PxPos px_pos);
+
+P gui_to_map_coords(const P gui_pos);
 
 // Returns a screen pixel position, relative to a cell position in a panel
-PxPos get_px_pos(const Panel panel, const P offset);
+PxPos gui_to_px_coords(const Panel panel, const P offset);
+PxPos map_to_px_coords(const Panel panel, const P offset);
 
 void draw_symbol(
         const TileId tile,

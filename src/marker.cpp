@@ -222,7 +222,7 @@ void MarkerState::draw_marker(
                 {
                         auto& d = marker_render_data_[x][y];
 
-                        d.tile  = TileId::empty;
+                        d.tile  = TileId::END;
                         d.character = 0;
                 }
         }

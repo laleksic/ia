@@ -41,7 +41,7 @@ struct Projectile
         Actor* actor_hit = nullptr;
         Feature* feature_hit = nullptr;
         bool is_seen_by_player = false;
-        TileId tile = TileId::empty;
+        TileId tile = TileId::END;
         char character = -1;
         Color color = colors::white();
         std::unique_ptr<RangedAttData> att_data = nullptr;
@@ -1156,7 +1156,7 @@ static void run_projectiles_messages_and_sounds(
 
 static void draw_projectile(const Projectile& projectile)
 {
-        if (projectile.tile == TileId::empty)
+        if (projectile.tile == TileId::END)
         {
                 return;
         }

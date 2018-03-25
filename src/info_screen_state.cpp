@@ -10,42 +10,43 @@ int InfoScreenState::max_nr_lines_on_screen() const
 
 void InfoScreenState::draw_interface() const
 {
-        const int screen_w = panels::get_w(Panel::screen);
+        // const int screen_w = panels::get_w(Panel::screen);
         const int screen_h = panels::get_h(Panel::screen);
 
-        if (config::is_tiles_mode())
-        {
-                for (int x = 0; x < screen_w; ++x)
-                {
-                        io::draw_tile(
-                                TileId::popup_hor,
-                                Panel::screen,
-                                P(x, 0),
-                                colors::title());
+        // TODO: Reimplement
+        // if (config::is_tiles_mode())
+        // {
+        //         for (int x = 0; x < screen_w; ++x)
+        //         {
+        //                 io::draw_tile(
+        //                         TileId::popup_hor,
+        //                         Panel::screen,
+        //                         P(x, 0),
+        //                         colors::title());
 
-                        io::draw_tile(
-                                TileId::popup_hor,
-                                Panel::screen,
-                                P(x, screen_h - 1),
-                                colors::title());
-                }
-        }
-        else // Text mode
-        {
-                const std::string decoration_line(map_w, '-');
+        //                 io::draw_tile(
+        //                         TileId::popup_hor,
+        //                         Panel::screen,
+        //                         P(x, screen_h - 1),
+        //                         colors::title());
+        //         }
+        // }
+        // else // Text mode
+        // {
+        //         const std::string decoration_line(map_w, '-');
 
-                io::draw_text(
-                        decoration_line,
-                        Panel::screen,
-                        P(0, 0),
-                        colors::title());
+        //         io::draw_text(
+        //                 decoration_line,
+        //                 Panel::screen,
+        //                 P(0, 0),
+        //                 colors::title());
 
-                io::draw_text(
-                        decoration_line,
-                        Panel::screen,
-                        P(0, screen_h - 1),
-                        colors::title());
-        }
+        //         io::draw_text(
+        //                 decoration_line,
+        //                 Panel::screen,
+        //                 P(0, screen_h - 1),
+        //                 colors::title());
+        // }
 
         const int x_label = 3;
 

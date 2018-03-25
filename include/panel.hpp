@@ -1,14 +1,18 @@
 #ifndef PANEL_HPP
 #define PANEL_HPP
 
-#include "rl_utils.hpp"
+struct PxPos;
+class R;
+class P;
 
 enum class Panel
 {
         screen,
         map,
-        status_lines,
+        player_stats,
+        equipped,
         log,
+        properties,
         create_char_menu,
         create_char_descr,
         item_menu,
@@ -19,9 +23,13 @@ enum class Panel
 namespace panels
 {
 
-void init();
+void init(const P max_gui_dims);
+
+bool is_valid();
 
 R get_area(const Panel panel);
+
+P get_dims(const Panel panel);
 
 P get_p0(const Panel panel);
 
